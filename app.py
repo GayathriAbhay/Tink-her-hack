@@ -59,9 +59,6 @@ def recommend_accessories(image):
 
     return predicted_accessory
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
 
     # Outfit Prediction
     outfit_prediction = predict_outfit(image)
