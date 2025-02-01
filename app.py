@@ -42,3 +42,31 @@ if uploaded_image is not None:
     predicted_category = predict(img)
     st.success(f"Predicted Outfit Category: **{predicted_category}**")
 
+# Load the trained models
+outfit_model = load_model('outfit_model.h5')
+accessory_model = load_model('accessory_model.h5')
+
+def recommend_accessories(image):
+    # Preprocess the accessory image (resize and normalize)
+    image = image.resize((64, 64))
+    image = np.array(image) / 255.0
+    image = image.reshape(1, 64, 64, 3)
+
+    # Get accessory prediction
+    prediction = accessory_model.predict(image)
+    accessory_classes = ['Shoes', 'Bag', 'Jewelry', 'Hat']  # Modify according to your dataset
+    predicted_accessory = accessory_classes[np.argmax(prediction)]
+
+    return predicted_accessory
+
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Uploaded Image', use_column_width=True)
+
+    # Outfit Prediction
+    outfit_prediction = predict_outfit(image)
+    st.write(f"Predicted Outfit: {outfit_prediction}")
+
+    # Accessory Prediction
+    accessory_recommendation = recommend_accessories(image)
+    st.write(f"Suggested Accessory: {accessory_recommendation}")
